@@ -18,7 +18,7 @@ The idea came to me, when we had to create a Turing machine in order to solve ou
 I did not feel like doing it on paper, so I created this project and\
 solved the task in a more practical way (not often seen in theoretical computer science). :-)\
 I wanted to share my project to demonstrate the workings of Turing machines more vivid, since it has a deeply theoretical background\
-and is not always as easy to understand as other topics in computer science.\
+and is not always as easy to understand as other topics in computer science.
 
 ## Content
 The project contains several files. Let us briefly look at the "**Exceptions**"-folder, which contains several\
@@ -49,7 +49,7 @@ Here's a quick overview of this must be done:
     tuple(current_state, tuple(symbol_tape_1, ..., symbol_tape_n)): \
     tuple(succ_state, tuple(to_write_1, ..., to_write_n), tuple(move_1, ..., move_n)),\
     ...}.\
-You can find another detailed description inside the scripts.\
+You can find another detailed description inside the scripts.
 
 ## Contact
 If you liked this project or have any comments, feel free to contact me:\
