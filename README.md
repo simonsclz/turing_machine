@@ -45,8 +45,10 @@ Here's a quick overview of this must be done:
   - Finally implement your delta-function. It's represented by a dictionary, where the keys are tuples and are
     composed by the current state and the symbols on the tapes.
     The corresponding values contain the successive state, the symbols to write on the tapes and the moves, which the write-and-read-unit(s) should do.
-    The format is as follows: delta = {(current_state, tuple(symbol_tape_1, ..., symbol_tape_n)): 
-    (succ_state, tuple(to_write_1, ..., to_write_n), tuple(move_1, ..., move_n)), ...}.
+    The format is as follows: delta = {
+    tuple(current_state, tuple(symbol_tape_1, ..., symbol_tape_n)): 
+    tuple(succ_state, tuple(to_write_1, ..., to_write_n), tuple(move_1, ..., move_n)),
+    ...}.
 You can find another detailed description inside the scripts.
 
 ## Contact
