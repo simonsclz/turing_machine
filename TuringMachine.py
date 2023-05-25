@@ -1,7 +1,7 @@
 from __future__ import annotations
 from time import sleep
-from Turing.Exceptions.TransitionException import TransitionException
-from Turing.Exceptions.MoveException import MoveException
+from Exceptions.TransitionException import TransitionException
+from Exceptions.MoveException import MoveException
 
 
 class TuringMachine:
@@ -62,6 +62,8 @@ class TuringMachine:
         :return: The updated word and index as a tuple.
         """
 
+        # TODO: maybe add symbols on every tape if end is reached --> better visualization
+
         if self.print_actions:
             print(f"move l, symbol {word[index]}->{symbol_to_write}")
 
@@ -83,6 +85,8 @@ class TuringMachine:
         :param symbol_to_write: The symbol to write on the current position.
         :return: The updated word and index as a tuple.
         """
+
+        # TODO: maybe add symbols on every tape if end is reached --> better visualization
 
         if self.print_actions:
             print(f"move r, symbol {word[index]}->{symbol_to_write}")
