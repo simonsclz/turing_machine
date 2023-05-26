@@ -52,7 +52,7 @@ class TuringMachine:
         self.print_actions = print_actions
         self.indices = []  # stores the current indices for the tapes
 
-    def __move_left(self, word: list, index: int, symbol_to_write: str, tape_idx: int) -> tuple:
+    def __move_left(self, word: list, index: int, symbol_to_write: str) -> tuple:
 
         """
         Moves the write-and-read-unit of the machine one square to the left.
@@ -60,12 +60,8 @@ class TuringMachine:
                 Has to be a list of strings (symbols).
         :param index: The current index the machine points on.
         :param symbol_to_write: The symbol to write on the current position.
-        :param tape_idx: The index of the tape which is going to be updated.
-                Also needed to add symbols on the other tapes.
         :return: The updated word and index as a tuple.
         """
-
-        # TODO: maybe add symbols on every tape if end is reached --> better visualization
 
         if self.print_actions:
             print(f"move l, symbol {word[index]}->{symbol_to_write}")
@@ -74,15 +70,11 @@ class TuringMachine:
         if index == 0:
             word.insert(0, self.blank)
             index = 0
-            for tape_index in range(self.amount_tapes):
-                if tape_index != tape_idx:
-                    self.tapes[tape_index].insert(0, self.blank)
-                    self.indices[tape_index] += 1
         else:
             index -= 1
         return word, index
 
-    def __move_right(self, word: list, index: int, symbol_to_write: str, tape_idx: int) -> tuple:
+    def __move_right(self, word: list, index: int, symbol_to_write: str) -> tuple:
 
         """
         Moves the write-and-read-unit of the machine one square to the right.
@@ -90,12 +82,8 @@ class TuringMachine:
                 Has to be a list of strings (symbols).
         :param index: The current index the machine points on.
         :param symbol_to_write: The symbol to write on the current position.
-        :param tape_idx: The index of the tape which is going to be updated.
-                Also needed to add symbols on the other tapes.
         :return: The updated word and index as a tuple.
         """
-
-        # TODO: maybe add symbols on every tape if end is reached --> better visualization
 
         if self.print_actions:
             print(f"move r, symbol {word[index]}->{symbol_to_write}")
@@ -104,10 +92,6 @@ class TuringMachine:
         if index == len(word) - 1:
             word.append(self.blank)
             index = len(word) - 1
-            for tape_index in range(self.amount_tapes):
-                if tape_index != tape_idx:
-                    self.tapes[tape_index].append(self.blank)
-                    self.indices[tape_index] -= 1
         else:
             index += 1
         return word, index
@@ -190,11 +174,11 @@ class TuringMachine:
                     if move[tape_index] == 'l':
                         self.tapes[tape_index], self.indices[tape_index] = \
                             self.__move_left(self.tapes[tape_index], self.indices[tape_index],
-                                             symbol_to_write[tape_index], tape_index)
+                                             symbol_to_write[tape_index])
                     elif move[tape_index] == 'r':
                         self.tapes[tape_index], self.indices[tape_index] = \
                             self.__move_right(self.tapes[tape_index], self.indices[tape_index],
-                                              symbol_to_write[tape_index], tape_index)
+                                              symbol_to_write[tape_index])
                     elif move[tape_index] == 'n':
                         self.tapes[tape_index] = \
                             self.__move_neutral(self.tapes[tape_index], self.indices[tape_index],
