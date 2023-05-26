@@ -50,8 +50,9 @@ class TuringMachine:
         self.tapes = [[] for _ in range(tapes)]
         self.amount_tapes = tapes
         self.print_actions = print_actions
+        self.indices = []  # stores the current indices for the tapes
 
-    def __move_left(self, word: list, index: int, symbol_to_write: str) -> tuple:
+    def __move_left(self, word: list, index: int, symbol_to_write: str, tape_idx: int) -> tuple:
 
         """
         Moves the write-and-read-unit of the machine one square to the left.
@@ -59,6 +60,8 @@ class TuringMachine:
                 Has to be a list of strings (symbols).
         :param index: The current index the machine points on.
         :param symbol_to_write: The symbol to write on the current position.
+        :param tape_idx: The index of the tape which is going to be updated.
+                Also needed to add symbols on the other tapes.
         :return: The updated word and index as a tuple.
         """
 
@@ -71,11 +74,15 @@ class TuringMachine:
         if index == 0:
             word.insert(0, self.blank)
             index = 0
+            for tape_index in range(self.amount_tapes):
+                if tape_index != tape_idx:
+                    self.tapes[tape_index].insert(0, self.blank)
+                    self.indices[tape_index] += 1
         else:
             index -= 1
         return word, index
 
-    def __move_right(self, word: list, index: int, symbol_to_write: str) -> tuple:
+    def __move_right(self, word: list, index: int, symbol_to_write: str, tape_idx: int) -> tuple:
 
         """
         Moves the write-and-read-unit of the machine one square to the right.
@@ -83,6 +90,8 @@ class TuringMachine:
                 Has to be a list of strings (symbols).
         :param index: The current index the machine points on.
         :param symbol_to_write: The symbol to write on the current position.
+        :param tape_idx: The index of the tape which is going to be updated.
+                Also needed to add symbols on the other tapes.
         :return: The updated word and index as a tuple.
         """
 
@@ -95,6 +104,10 @@ class TuringMachine:
         if index == len(word) - 1:
             word.append(self.blank)
             index = len(word) - 1
+            for tape_index in range(self.amount_tapes):
+                if tape_index != tape_idx:
+                    self.tapes[tape_index].append(self.blank)
+                    self.indices[tape_index] -= 1
         else:
             index += 1
         return word, index
@@ -116,11 +129,10 @@ class TuringMachine:
         word[index] = symbol_to_write
         return word
 
-    def __print_configuration(self, indices: list) -> None:
+    def __print_configuration(self) -> None:
 
         """
         Prints the current configuration of the machine.
-        :param indices: List of indices where the write-and-read-units on each tape point to.
         :return: Nothing. Prints the configuration on the screen.
         """
 
@@ -128,7 +140,7 @@ class TuringMachine:
             # print(f"Tape {tape_index+1}:")
             tape = self.tapes[tape_index]
             for index in range(len(tape)):
-                if index == indices[tape_index]:
+                if index == self.indices[tape_index]:
                     # prints the current index bold
                     print(">" + tape[index] + "<", end="\t")
                 else:
@@ -156,16 +168,16 @@ class TuringMachine:
                 self.tapes[0] = word
             else:
                 self.tapes[tape_index] = [self.blank] * len(word)
-        indices = [0 for _ in range(self.amount_tapes)]
+        self.indices = [0 for _ in range(self.amount_tapes)]
 
         # loop while the machine is not in an end state
 
         while current_state not in self.end_states:
             # print the current config
-            self.__print_configuration(indices)
+            self.__print_configuration()
 
             # select the index-th tape and find the current symbol
-            symbol = tuple([self.tapes[index][indices[index]] for index in range(self.amount_tapes)])
+            symbol = tuple([self.tapes[index][self.indices[index]] for index in range(self.amount_tapes)])
             if (current_state, symbol) in self.delta.keys():
                 successive_state, symbol_to_write, move = self.delta[(current_state, symbol)]
                 for tape_index in range(self.amount_tapes):
@@ -176,16 +188,16 @@ class TuringMachine:
                         print(f"Tape {tape_index + 1}:", end=" ")
 
                     if move[tape_index] == 'l':
-                        self.tapes[tape_index], indices[tape_index] = \
-                            self.__move_left(self.tapes[tape_index], indices[tape_index],
-                                             symbol_to_write[tape_index])
+                        self.tapes[tape_index], self.indices[tape_index] = \
+                            self.__move_left(self.tapes[tape_index], self.indices[tape_index],
+                                             symbol_to_write[tape_index], tape_index)
                     elif move[tape_index] == 'r':
-                        self.tapes[tape_index], indices[tape_index] = \
-                            self.__move_right(self.tapes[tape_index], indices[tape_index],
-                                              symbol_to_write[tape_index])
+                        self.tapes[tape_index], self.indices[tape_index] = \
+                            self.__move_right(self.tapes[tape_index], self.indices[tape_index],
+                                              symbol_to_write[tape_index], tape_index)
                     elif move[tape_index] == 'n':
                         self.tapes[tape_index] = \
-                            self.__move_neutral(self.tapes[tape_index], indices[tape_index],
+                            self.__move_neutral(self.tapes[tape_index], self.indices[tape_index],
                                                 symbol_to_write[tape_index])
                     else:
                         raise MoveException(move)
@@ -198,5 +210,5 @@ class TuringMachine:
                 raise TransitionException((current_state, symbol))
         else:
             # print last config
-            self.__print_configuration(indices)
+            self.__print_configuration()
             print("Successfully accepted!")

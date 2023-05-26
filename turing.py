@@ -17,7 +17,7 @@ blank = "⃞"
 tapes = 3
 
 # If the machine should print its actions
-print_actions = True
+print_actions = False
 
 # Delta-/transition-function
 delta = {
