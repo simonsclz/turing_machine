@@ -14,4 +14,4 @@ class TuringSimulator:
 
 if __name__ == "__main__":
     ts = TuringSimulator()
-    ts.simulate("1011#1011", 0.1)
+    ts.simulate("11100#1101", 4)
