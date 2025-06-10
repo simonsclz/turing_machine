@@ -30,13 +30,15 @@ n = "n"
 
 # Delta-/transition-function
 delta = {
-    # Copy the numbers from the first band to the first two
+    # Copies the numbers from the first tape to the first two
     ("z_0", ("1", blank, blank)): ("z_0", ("1", blank, blank), (r, n, n)),
     ("z_0", ("#", blank, blank)): ("copy", ("#", blank, blank), (r, n, n)),
 
+    # Copies the numbers from the first tape to the first two (after #)
     ("copy", ("1", blank, blank)): ("copy", ("1", "1", blank), (r, r, n)),
     ("copy", (blank, blank, blank)): ("go_left", (blank, blank, blank), (l, l, n)),
 
+    # Moves the headers of the first and second tape to the left (clearing tape one)
     ("go_left", (blank, "1", blank)): ("go_left", (blank, "1", blank), (l, l, n)),
     ("go_left", ("1", blank, blank)): ("go_left", ("1", blank, blank), (l, l, n)),
     ("go_left", ("1", "1", blank)): ("go_left", (blank, "1", blank), (l, l, n)),
@@ -44,6 +46,7 @@ delta = {
     ("go_left", ("#", "1", blank)): ("go_left_ident", (blank, "1", blank), (l, l, n)),
     ("go_left", ("#", blank, blank)): ("go_left_ident", (blank, blank, blank), (l, n, n)),
 
+    # Moves the headers of the first and second tape to the left (leaves tape one as it is)
     ("go_left_ident", ("1", "1", blank)): ("go_left_ident", ("1", "1", blank), (l, l, n)),
     ("go_left_ident", ("1", blank, blank)): ("go_left_ident", ("1", blank, blank), (l, n, n)),
     ("go_left_ident", (blank, blank, blank)): ("multiply", (blank, blank, blank), (r, r, n)),
@@ -52,10 +55,12 @@ delta = {
     ("multiply", ("1", blank, blank)): ("z_end", ("1", blank, blank), (n, l, l)),  # Accepting criterion
     ("multiply", ("1", "1", blank)): ("multiply_one_itr", ("1", "1", blank), (n, n, n)),
 
+    # Appends the string from tape one to the string on tape three
     ("multiply_one_itr", ("1", "1", blank)): ("multiply_one_itr", ("1", "1", "1"), (r, n, r)),
     ("multiply_one_itr", (blank, "1", blank)): ("multiply_left", (blank, "1", blank), (l, n, n)),
 
+    # Moves the header of the first tape to the left while maintaining the others
     ("multiply_left", ("1", "1", blank)): ("multiply_left", ("1", "1", blank), (l, n, n)),
-    ("multiply_left", (blank, "1", blank)): ("multiply", (blank, "1", blank), (r, r, n)),
+    ("multiply_left", (blank, "1", blank)): ("multiply", (blank, "1", blank), (r, r, n)),  # second to the right --> next iteration
 
 }
