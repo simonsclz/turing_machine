@@ -1,3 +1,5 @@
+# NAME: add.turing
+
 # The alphabet, the machine should work on
 alphabet = ["1", "0", "#"]
 

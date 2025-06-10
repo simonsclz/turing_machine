@@ -1,0 +1,61 @@
+# NAME: mult.turing
+# DESCR: Multiply two numbers x1 and x2 given in unary coding, i.e. if x1 = 5 then we code it as x1 = 11111.
+
+# The alphabet, the machine should work on
+alphabet = ["1", "#"]
+
+# Initial state
+init_state = "z_0"
+
+# End states
+end_states = ["z_end"]
+
+# All states, add "normal" states
+states = [init_state] + end_states + ["copy", "go_left", "go_left_ident",
+                                      "multiply", "multiply_one_itr", "multiply_left"]
+
+# The blank
+blank = "⃞"
+
+# Number of tapes
+tapes = 3
+
+# If the machine should print its actions
+print_actions = False
+
+# Moving options
+r = "r"
+l = "l"
+n = "n"
+
+# Delta-/transition-function
+delta = {
+    # Copy the numbers from the first band to the first two
+    ("z_0", ("1", blank, blank)): ("z_0", ("1", blank, blank), (r, n, n)),
+    ("z_0", ("#", blank, blank)): ("copy", ("#", blank, blank), (r, n, n)),
+
+    ("copy", ("1", blank, blank)): ("copy", ("1", "1", blank), (r, r, n)),
+    ("copy", (blank, blank, blank)): ("go_left", (blank, blank, blank), (l, l, n)),
+
+    ("go_left", (blank, "1", blank)): ("go_left", (blank, "1", blank), (l, l, n)),
+    ("go_left", ("1", blank, blank)): ("go_left", ("1", blank, blank), (l, l, n)),
+    ("go_left", ("1", "1", blank)): ("go_left", (blank, "1", blank), (l, l, n)),
+    ("go_left", ("1", blank, blank)): ("go_left", (blank, blank, blank), (l, n, n)),
+    ("go_left", ("#", "1", blank)): ("go_left_ident", (blank, "1", blank), (l, l, n)),
+    ("go_left", ("#", blank, blank)): ("go_left_ident", (blank, blank, blank), (l, n, n)),
+
+    ("go_left_ident", ("1", "1", blank)): ("go_left_ident", ("1", "1", blank), (l, l, n)),
+    ("go_left_ident", ("1", blank, blank)): ("go_left_ident", ("1", blank, blank), (l, n, n)),
+    ("go_left_ident", (blank, blank, blank)): ("multiply", (blank, blank, blank), (r, r, n)),
+
+    # The actual multiplication
+    ("multiply", ("1", blank, blank)): ("z_end", ("1", blank, blank), (n, l, l)),  # Accepting criterion
+    ("multiply", ("1", "1", blank)): ("multiply_one_itr", ("1", "1", blank), (n, n, n)),
+
+    ("multiply_one_itr", ("1", "1", blank)): ("multiply_one_itr", ("1", "1", "1"), (r, n, r)),
+    ("multiply_one_itr", (blank, "1", blank)): ("multiply_left", (blank, "1", blank), (l, n, n)),
+
+    ("multiply_left", ("1", "1", blank)): ("multiply_left", ("1", "1", blank), (l, n, n)),
+    ("multiply_left", (blank, "1", blank)): ("multiply", (blank, "1", blank), (r, r, n)),
+
+}

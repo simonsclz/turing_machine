@@ -1,5 +1,6 @@
-# NOTE: only works if x1 >= x2
+# NAME: sub.turing
 
+# NOTE: only works if x1 >= x2
 
 # The alphabet, the machine should work on
 alphabet = ["1", "0", "#"]
