@@ -23,7 +23,7 @@ blank = "⃞"
 tapes = 3
 
 # If the machine should print its actions
-print_actions = False
+print_actions = True
 
 # Moving options
 r = "r"
@@ -62,13 +62,13 @@ delta = {
     # Moves the header of the first tape to the next key while maintaining the others
     ("to_next_key", ("1", blank, blank)): ("to_next_key", ("1", blank, blank), (r, n, n)),
     ("to_next_key", ("0", blank, blank)): ("to_next_key", ("0", blank, blank), (r, n, n)),
-    ("to_next_key", (":", blank, blank)): ("to_next_key", ("0", blank, blank), (r, n, n)),
+    ("to_next_key", (":", blank, blank)): ("to_next_key", (":", blank, blank), (r, n, n)),
     ("to_next_key", ("1", "0", blank)): ("to_next_key", ("1", "0", blank), (r, n, n)),
     ("to_next_key", ("0", "0", blank)): ("to_next_key", ("0", "0", blank), (r, n, n)),
-    ("to_next_key", (":", "0", blank)): ("to_next_key", ("0", "0", blank), (r, n, n)),
+    ("to_next_key", (":", "0", blank)): ("to_next_key", (":", "0", blank), (r, n, n)),
     ("to_next_key", ("1", "1", blank)): ("to_next_key", ("1", "1", blank), (r, n, n)),
     ("to_next_key", ("0", "1", blank)): ("to_next_key", ("0", "1", blank), (r, n, n)),
-    ("to_next_key", (":", "1", blank)): ("to_next_key", ("0", "1", blank), (r, n, n)),
+    ("to_next_key", (":", "1", blank)): ("to_next_key", (":", "1", blank), (r, n, n)),
     ("to_next_key", (";", "0", blank)): ("go_left", (";", "0", blank), (n, l, n)),
     ("to_next_key", (";", "1", blank)): ("go_left", (";", "1", blank), (n, l, n)),
     ("to_next_key", (";", blank, blank)): ("go_left", (";", blank, blank), (n, l, n)),
